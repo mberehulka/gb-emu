@@ -1,5 +1,4 @@
 mod registers;    pub use registers::*;
-mod instruction;  pub use instruction::*;
 mod cpu;          pub use cpu::*;
 mod memory;       pub use memory::*;
 

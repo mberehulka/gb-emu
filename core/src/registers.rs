@@ -9,16 +9,7 @@ pub struct Registers {
     pub h: u8,
     pub l: u8,
     pub pc: u16, // program counter - address to the current instruction
-    pub sc: u16  // stack counter - address to the end of the stack
-}
-impl Registers {
-    pub fn get_bc(&self) -> u16 {
-      (self.b as u16) << 8 | self.c as u16
-    }
-    pub fn set_bc(&mut self, value: u16) {
-      self.b = (value >> 8) as u8;
-      self.c = value as u8;
-    }
+    pub sp: u16  // stack counter - address to the end of the stack
 }
 
 #[derive(Default)]
@@ -60,3 +51,22 @@ impl From<u8> for FlagRegister {
         }
     }
 }
+
+macro_rules! reg_comb {
+    ($a: ident, $b: ident) => {
+        paste::paste! {
+            impl Registers {
+                pub fn [<get_$a$b>](&self) -> u16 {
+                    (self.b as u16) << 8 | self.c as u16
+                }
+                pub fn [<set_$a$b>](&mut self, value: u16) {
+                    self.b = (value >> 8) as u8;
+                    self.c = value as u8;
+                }
+            }
+        }
+    };
+}
+reg_comb!(h, l);
+reg_comb!(b, c);
+reg_comb!(d, e);
